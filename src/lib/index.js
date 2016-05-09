@@ -10,7 +10,7 @@ const validate = ({ assert, classNames, React, ReactCSSTransitionGroup }) => {
   return { assert, classNames, React, ReactCSSTransitionGroup }
 }
 
-const generateArray = N => [...(function*(){let i=0;while(i<N)yield i++})()]
+const generateArray = N => [...(function* (){let i=0;while(i<N)yield i++})()]
 
 
 export default dependencies => {
@@ -64,7 +64,8 @@ export default dependencies => {
                           , messageStyle: {}
                           , theme: 'solarized'
                           };
-    constructor() {
+    constructor(props) {
+      super(props)
       this.state = { pin: [] }
     }
     render() {
