@@ -10,7 +10,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import { log } from '../config'\r\nimport './style'\r\n\r\nconst validate = ({ assert, classNames, React, ReactCSSTransitionGroup }) => {\r\n  if(!assert)\r\n    throw new Error('react-hatch requires an assert dependency.')\r\n  assert.ok(classNames, 'react-hatch requires classNames dependency.')\r\n  assert.ok(React, 'react-hatch requires React dependency.')\r\n  assert.ok(ReactCSSTransitionGroup, 'react-hatch requires ReactCSSTransitionGroup dependency.')\r\n  return { assert, classNames, React, ReactCSSTransitionGroup }\r\n}\r\n\r\nexport default dependencies => {\r\n  const { assert, classNames, React, ReactCSSTransitionGroup } = dependencies\r\n  const { Component, PropTypes } = React\r\n\r\n}\r\n"
+    "content": "import { log } from '../config'\r\nimport './style'\r\n\r\nconst validate = ({ assert, classNames, React, ReactCSSTransitionGroup }) => {\r\n  if(!assert)\r\n    throw new Error('react-hatch requires an assert dependency.')\r\n  assert.ok(classNames, 'react-hatch requires classNames dependency.')\r\n  assert.ok(React, 'react-hatch requires React dependency.')\r\n  assert.ok(ReactCSSTransitionGroup, 'react-hatch requires ReactCSSTransitionGroup dependency.')\r\n  return { assert, classNames, React, ReactCSSTransitionGroup }\r\n}\r\n\r\nconst generateArray = N => [...(function* (){let i=0;while(i<N)yield i++})()]\r\n\r\n\r\nexport default dependencies => {\r\n  const { assert, classNames, React, ReactCSSTransitionGroup } = validate(dependencies)\r\n  const { Component, PropTypes } = React\r\n\r\n\r\n  const PinHorizontal = ({ pin = [], onEntry, maxDigits, theme }) => {\r\n    const containerStyle = {}\r\n    const entryChanged = ({ ordinal, value }) => value ? onEntry(pin.concat(value)) : onEntry(pin.slice(0, ordinal))\r\n    return (\r\n      <div>\r\n        {generateArray(maxDigits).map(x => (\r\n          <div key={x} style={containerStyle}>\r\n            <input type=\"password\" autoComplete=\"new-password\" onChange={({ target: { value } }) => entryChanged({ ordinal: x, value })} value={pin[x] || ''} />\r\n          </div>\r\n        ))}\r\n      </div>\r\n    )\r\n  }\r\n\r\n  const PinPad = ({ pin = [], onEntry, maxDigits, theme }) => {\r\n    return (\r\n      <div>PinPad needs work!</div>\r\n    )\r\n  }\r\n\r\n\r\n  return class Pin extends Component {\r\n    static propsTypes = { validate: PropTypes.func.isRequired\r\n                        , onEntry: PropTypes.func.isRequired\r\n                        , onSuccess: PropTypes.func.isRequired\r\n                        , type: PropTypes.string.oneOf(['horizontal', 'pad']).isRequired\r\n                        , minDigits: PropTypes.number.isRequired\r\n                        , maxDigits: PropTypes.number.isRequired\r\n                        , title: PropTypes.string.isRequired\r\n                        , message: PropTypes.string.isRequired\r\n                        , containerStyle: PropTypes.object.isRequired\r\n                        , titleStyle: PropTypes.object.isRequired\r\n                        , messageStyle: PropTypes.object.isRequired\r\n                        , theme: PropTypes.oneOf(['solarized', 'shield', 'carbon']).isRequired\r\n                        };\r\n    static defaultProps = { type: 'horizontal'\r\n                          , onEntry: pin => {}\r\n                          , minDigits: 1\r\n                          , maxDigits: 4\r\n                          , title: 'Locked'\r\n                          , message: 'Enter your pin to continue.'\r\n                          , containerStyle: {}\r\n                          , titleStyle: {}\r\n                          , messageStyle: {}\r\n                          , theme: 'solarized'\r\n                          };\r\n    constructor(props) {\r\n      super(props)\r\n      this.state = { pin: [] }\r\n    }\r\n    render() {\r\n      const { validate, type, minDigits, onEntry, onSuccess, title, message, containerStyle, titleStyle, messageStyle, ...viewProps } = this.props\r\n\r\n      const handleEntry = pin => {\r\n        if(pin.length >= minDigits)\r\n          return validate(pin) ? onSuccess(pin) : onEntry(pin)\r\n        this.setState({ pin })\r\n      }\r\n\r\n      return (\r\n        <div style={containerStyle}>\r\n          <div style={titleStyle}>{title}</div>\r\n          <div style={messageStyle}>{message}</div>\r\n          {type === 'horizontal' ? <PinHorizontal {...viewProps} onEntry={handleEntry} pin={this.state.pin} /> : null}\r\n          {type === 'pad' ? <PinPad {...viewProps} onEntry={handleEntry} pin={this.state.pin} /> : null}\r\n        </div>\r\n      )\r\n    }\r\n\r\n\r\n  }\r\n}\r\n"
   },
   {
     "__docId__": 1,
@@ -35,6 +35,27 @@
   },
   {
     "__docId__": 2,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "generateArray",
+    "memberof": "lib/index.js",
+    "longname": "lib/index.js~generateArray",
+    "access": null,
+    "export": false,
+    "importPath": "react-pin",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 13,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 3,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -47,7 +68,7 @@
     "content": "import './Hatch.css'\r\nimport './Hatch.less'\r\nimport './Hatch-themes.css'\r\nimport './Hatch-sr.css'\r\n"
   },
   {
-    "__docId__": 4,
+    "__docId__": 5,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -60,7 +81,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 5,
+    "__docId__": 6,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -73,7 +94,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 6,
+    "__docId__": 7,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -86,7 +107,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 7,
+    "__docId__": 8,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -99,7 +120,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 8,
+    "__docId__": 9,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -112,7 +133,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 9,
+    "__docId__": 10,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -125,7 +146,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 10,
+    "__docId__": 11,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -138,7 +159,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 11,
+    "__docId__": 12,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -151,7 +172,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 12,
+    "__docId__": 13,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -164,7 +185,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 13,
+    "__docId__": 14,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -177,7 +198,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 14,
+    "__docId__": 15,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -190,7 +211,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 15,
+    "__docId__": 16,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -203,7 +224,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 16,
+    "__docId__": 17,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -216,7 +237,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 17,
+    "__docId__": 18,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -229,7 +250,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 18,
+    "__docId__": 19,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -242,7 +263,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 19,
+    "__docId__": 20,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -255,7 +276,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 20,
+    "__docId__": 21,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -268,7 +289,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 21,
+    "__docId__": 22,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -281,7 +302,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 22,
+    "__docId__": 23,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -294,7 +315,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 23,
+    "__docId__": 24,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -307,7 +328,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 24,
+    "__docId__": 25,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -320,7 +341,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 25,
+    "__docId__": 26,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -333,7 +354,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 26,
+    "__docId__": 27,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -346,7 +367,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 27,
+    "__docId__": 28,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -359,7 +380,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 28,
+    "__docId__": 29,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -372,7 +393,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 29,
+    "__docId__": 30,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -385,7 +406,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 30,
+    "__docId__": 31,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -398,7 +419,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 31,
+    "__docId__": 32,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -411,7 +432,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 32,
+    "__docId__": 33,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -424,7 +445,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 33,
+    "__docId__": 34,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -437,7 +458,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 34,
+    "__docId__": 35,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -450,7 +471,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 35,
+    "__docId__": 36,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -463,7 +484,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 36,
+    "__docId__": 37,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -476,7 +497,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 37,
+    "__docId__": 38,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -489,7 +510,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 38,
+    "__docId__": 39,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -502,7 +523,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 39,
+    "__docId__": 40,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -515,7 +536,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 40,
+    "__docId__": 41,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -528,7 +549,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 41,
+    "__docId__": 42,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -541,7 +562,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 42,
+    "__docId__": 43,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -554,7 +575,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 43,
+    "__docId__": 44,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -567,7 +588,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 44,
+    "__docId__": 45,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -580,7 +601,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 45,
+    "__docId__": 46,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -593,7 +614,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 46,
+    "__docId__": 47,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -606,7 +627,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 47,
+    "__docId__": 48,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -619,7 +640,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 48,
+    "__docId__": 49,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -632,7 +653,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 49,
+    "__docId__": 50,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -645,7 +666,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 50,
+    "__docId__": 51,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -658,7 +679,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 52,
+    "__docId__": 53,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -671,7 +692,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 53,
+    "__docId__": 54,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -684,7 +705,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 54,
+    "__docId__": 55,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -697,7 +718,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 55,
+    "__docId__": 56,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -710,7 +731,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 56,
+    "__docId__": 57,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -723,7 +744,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 57,
+    "__docId__": 58,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -736,7 +757,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 58,
+    "__docId__": 59,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -749,7 +770,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 59,
+    "__docId__": 60,
     "kind": "external",
     "static": true,
     "variation": null,
