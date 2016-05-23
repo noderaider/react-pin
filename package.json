@@ -1,6 +1,6 @@
 {
   "name": "react-pin",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "React lock screen pin entry component.",
   "main": "lib/index.js",
   "files": [
